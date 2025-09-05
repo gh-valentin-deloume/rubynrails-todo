@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
-  namespace :admin do
-      resources :tasks
-
-      root to: "tasks#index"
-    end
-  get "up" => "rails/health#show", as: :rails_health_check
-
   resources :tasks
+  mount_devise_token_auth_for 'User', at: 'auth'
+  namespace :admin do
+    resources :tasks
+    resources :users
+
+    root to: 'tasks#index'
+  end
 end
