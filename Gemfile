@@ -67,8 +67,6 @@ gem "fast_jsonapi", "~> 1.5"
 
 gem "administrate", "~> 0.19.0"
 
-gem "devise_token_auth", "~> 1.2"
 
-gem "devise", "~> 4.9"
 
 gem "bcrypt", "~> 3.1"

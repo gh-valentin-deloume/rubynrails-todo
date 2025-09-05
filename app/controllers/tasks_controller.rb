@@ -2,6 +2,7 @@ class TasksController < ApplicationController
   before_action :set_task, only: %i[show update destroy]
   before_action :is_not_exist, only: [:create]
   #before_action :params_require, only: [:create]
+  before_action :authenticate_user!
 
   def index
     task = Task.all
