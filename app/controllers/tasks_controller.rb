@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[show update destroy]
   before_action :is_not_exist, only: [:create]
-  before_action :params_require, only: [:create]
+  #before_action :params_require, only: [:create]
 
   def index
     task = Task.all
@@ -15,7 +15,10 @@ class TasksController < ApplicationController
   def create
     task = Task.new(title: params[:title], done: params[:done])
 
-    return unless task.save
+    unless task.save
+      render json: {message: task.errors.full_messages.to_sentence}
+      return
+    end
 
     render json: task
   end
