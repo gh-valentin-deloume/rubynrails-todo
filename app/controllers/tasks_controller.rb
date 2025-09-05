@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [ :show, :update, :destroy ]
-  before_action :is_not_exist, only: [ :create ]
-  before_action :params_require, only: [ :create ]
+  before_action :set_task, only: %i[show update destroy]
+  before_action :is_not_exist, only: [:create]
+  before_action :params_require, only: [:create]
 
   def index
     task = Task.all
@@ -15,22 +15,22 @@ class TasksController < ApplicationController
   def create
     task = Task.new(title: params[:title], done: params[:done])
 
-    if task.save
-      render json: task
-    end
+    return unless task.save
+
+    render json: task
   end
 
   def destroy
-    @task.destroy()
+    @task.destroy
   end
 
   def update
-    @task.title = params[:title] if params[:title]
-    @task.done = params[:done] if params[:done]
+    @task.title = params[:title] if params.key?(:title)
+    @task.done = params[:done] if params.key?(:done)
 
-    if @task.save
-      render json: @task
-    end
+    return unless @task.save
+
+    render json: @task
   end
 
   private
@@ -38,21 +38,21 @@ class TasksController < ApplicationController
   def set_task
     @task = Task.find_by(params_find)
 
-    if @task.nil?
-      render json: { message: "Not found" }, status: :not_found
-    end
+    return unless @task.nil?
+
+    render json: { message: 'Not found' }, status: :not_found
   end
 
   def is_not_exist
-    if Task.find_by(params_find)
-      render json: { message: "Already exist" }
-    end
+    return unless Task.find_by(params_find)
+
+    render json: { message: 'Already exist' }
   end
 
   def params_require
-    unless params.key?(:title) && params.key?(:done)
-      render json: { message: "Invalid parameters (body)" }, status: 400
-    end
+    return if params.key?(:title) && params.key?(:done)
+
+    render json: { message: 'Invalid parameters (body)' }, status: 400
   end
 
   def params_find
